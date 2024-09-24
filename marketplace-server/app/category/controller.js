@@ -6,15 +6,13 @@ const categorySchema = Joi.object({
   ct_name: Joi.string().min(3).max(20).required(),
 });
 
-// Helper function to handle validation errors
 const handleValidationError = (err, res) => {
   return res.status(400).json({
     success: false,
-    message: err.details[0].message, // Mengambil pesan error dari Joi
+    message: err.details[0].message,
   });
 };
 
-// Create Category
 const create = async (req, res, next) => {
   const { error } = categorySchema.validate(req.body);
   if (error) return handleValidationError(error, res);
@@ -23,11 +21,10 @@ const create = async (req, res, next) => {
     const category = await Category.create(req.body);
     res.status(201).json({ success: true, data: category });
   } catch (err) {
-    next(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// Update Category
 const update = async (req, res, next) => {
   const { error } = categorySchema.validate(req.body);
   if (error) return handleValidationError(error, res);
@@ -37,61 +34,35 @@ const update = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    category
-      ? res.status(200).json({ success: true, data: category })
-      : res.status(404).json({ success: false, message: "Category not found" });
+    if (!category)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
+    res.status(200).json({ success: true, data: category });
   } catch (err) {
-    next(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// Get Categories
-// const index = async (req, res, next) => {
-//   try {
-//     const { skip = 0, limit = 10 } = req.query;
-//     const categories = await Category.find()
-//       .skip(parseInt(skip))
-//       .limit(parseInt(limit));
-//     res.status(200).json({ success: true, data: categories });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// const index = async (req, res, next) => {
-//   try {
-//     const { skip = 0, limit = 10 } = req.query;
-//     const categories = await Category.find()
-//       .skip(parseInt(skip))
-//       .limit(parseInt(limit));
-
-//     res.status(200).json({ success: true, data: categories });
-//   } catch (err) {
-//     console.error("Error fetching categories:", err); // Tampilkan error di console
-//     next(err); // Kirim error ke error handler
-//   }
-// };
-
 const index = async (req, res, next) => {
-  console.log("Fetching categories...");
   try {
     const categories = await Category.find();
     res.status(200).json({ success: true, data: categories });
   } catch (err) {
-    console.error("Error fetching categories:", err);
-    next(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// Delete Category
 const destroy = async (req, res, next) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
-    category
-      ? res.status(200).json({ success: true, data: category })
-      : res.status(404).json({ success: false, message: "Category not found" });
+    if (!category)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
+    res.status(200).json({ success: true, data: category });
   } catch (err) {
-    next(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
