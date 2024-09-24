@@ -1,13 +1,14 @@
 const router = require("express").Router();
 
+const authMiddleware = require("../../middlewares/authMiddleware");
 const productController = require("./controller");
 
 router.get("/products", productController.index);
 
-router.post("/products", productController.create);
+router.post("/products", authMiddleware, productController.create);
 
-router.put("/products/:id", productController.update);
+router.put("/products/:id", authMiddleware, productController.update);
 
-router.delete("/products/:id", productController.destroy);
+router.delete("/products/:id", authMiddleware, productController.destroy);
 
 module.exports = router;

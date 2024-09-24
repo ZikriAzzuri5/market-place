@@ -7,7 +7,7 @@ const cors = require("cors");
 
 const categoryRoute = require("./app/category/routes");
 const productRoute = require("./app/product/routes");
-const userRoute = require("./app/user/routes");
+const authRoute = require("./app/auth/routes");
 const orderRoute = require("./app/order/routes");
 
 var app = express();
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", categoryRoute);
 app.use("/api", productRoute);
-app.use("/api", userRoute);
+app.use("/auth", authRoute);
 app.use("/api", orderRoute);
 
 app.use("/", function (req, res, next) {
