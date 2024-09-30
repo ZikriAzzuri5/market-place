@@ -54,7 +54,7 @@ const update = async (req, res, next) => {
 
 const index = async (req, res, next) => {
   try {
-    const orders = await Order.find().populate.apply("or_pd_id");
+    const orders = await Order.find().populate("or_pd_id");
     res.status(200).json({ success: true, data: orders });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

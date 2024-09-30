@@ -2,13 +2,15 @@ const jwt = require("jsonwebtoken");
 const config = require("../app/config");
 
 const authMiddleware = (req, res, next) => {
-  const token = req.headers["authorization"];
+  const authHeader = req.headers["authorization"];
 
-  if (!token) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res
       .status(401)
-      .json({ success: false, message: "No token provided" });
+      .json({ success: false, message: "No token provided or invalid format" });
   }
+
+  const token = authHeader.split(" ")[1];
 
   jwt.verify(token, config.secretKey, (err, decoded) => {
     if (err) {
