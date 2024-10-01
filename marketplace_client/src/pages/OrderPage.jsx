@@ -9,8 +9,8 @@ import { ConfirmModal } from "../components/ui/ConfirmModal";
 import { showSuccessToast } from "../utils/ToastUtils";
 import { customStyles } from "../utils/DataTable";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 export const OrderPage = () => {
   const [orders, setOrders] = useState([]);
