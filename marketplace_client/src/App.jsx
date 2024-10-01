@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { PrivateRoute } from "./components/privateRoute/privateRoute";
+import { PrivateRoute } from "./components/privateRoute/PrivateRoute";
 
 import { CategoryForm } from "./components/forms/CategoryForm";
 import { ProductForm } from "./components/forms/ProductForm";
