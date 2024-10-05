@@ -16,11 +16,12 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const corsOptions = {
-  origin: "https://market-place-orpin.vercel.app", // Frontend Anda
+  origin: "https://marketplace-portofolio-zikri.web.app", // Frontend Anda
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 };
 
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.json());
