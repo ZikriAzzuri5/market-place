@@ -18,6 +18,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { showSuccessToast } from "../utils/ToastUtils";
 
+// Schema untuk login
 const loginSchema = yup.object().shape({
   us_email: yup
     .string()
@@ -29,6 +30,7 @@ const loginSchema = yup.object().shape({
     .required("Password is required"),
 });
 
+// Schema untuk register
 const registerSchema = yup.object().shape({
   us_name: yup.string().required("Name is required"),
   us_email: yup
@@ -63,6 +65,7 @@ export const AuthPage = ({ setIsAuthenticated }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(isLogin ? loginSchema : registerSchema),
@@ -92,6 +95,7 @@ export const AuthPage = ({ setIsAuthenticated }) => {
   };
 
   const toggleAuthMode = () => {
+    reset(); // Reset data form saat berpindah mode
     navigate(isLogin ? "/register" : "/login");
   };
 
@@ -232,7 +236,7 @@ export const AuthPage = ({ setIsAuthenticated }) => {
                 className="text-black ml-2 underline hover:no-underline transition duration-200"
                 onClick={toggleAuthMode}
               >
-                {isLogin ? "Register" : "Sign In"}
+                {isLogin ? "Register" : "Login"}
               </button>
             </p>
           </div>
