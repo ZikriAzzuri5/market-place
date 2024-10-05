@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LOGIN_URL } from "../service/api";
+import { LOGIN_URL, REGISTER_URL } from "../service/api";
 import axios from "axios";
 import { useEffect } from "react";
 import { showSuccessToast } from "../utils/ToastUtils";
@@ -69,16 +69,22 @@ export const AuthPage = ({ setIsAuthenticated }) => {
   });
 
   const onSubmit = async (data) => {
+    console.log("Data to submit:", data);
     try {
-      const res = await axios.post(LOGIN_URL, data);
+      const res = isLogin
+        ? await axios.post(LOGIN_URL, data)
+        : await axios.post(REGISTER_URL, data);
 
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
-
         setIsAuthenticated(true);
-
-        showSuccessToast(`Welcome to crud admin app`);
-        navigate("/dashboard");
+        if (isLogin) {
+          showSuccessToast(`Welcome back!`);
+          navigate("/dashboard");
+        } else {
+          showSuccessToast(`Registration successful! Please login.`);
+          navigate("/login");
+        }
       }
     } catch (err) {
       console.error("Login failed:", err);
