@@ -71,26 +71,48 @@ export const AuthPage = ({ setIsAuthenticated }) => {
     resolver: yupResolver(isLogin ? loginSchema : registerSchema),
   });
 
+  // const onSubmit = async (data) => {
+  //   try {
+  //     const res = isLogin
+  //       ? await axios.post(LOGIN_URL, data)
+  //       : await axios.post(REGISTER_URL, data);
+
+  //     if (isLogin) {
+  //       if (res.data.token) {
+  //         localStorage.setItem("token", res.data.token);
+  //         setIsAuthenticated(true);
+  //         showSuccessToast("Welcome back!");
+  //         navigate("/dashboard");
+  //       } else {
+  //         showSuccessToast(`Registration successful! Please login.`);
+  //         navigate("/login");
+  //       }
+  //     }
+  //   } catch (err) {
+  //     const errorMessage = err.response?.data?.message || "An error occurred";
+  //     console.log(err);
+  //     console.error("Submission failed:", errorMessage);
+  //     showErrorToast(errorMessage);
+  //   }
+  // };
+
   const onSubmit = async (data) => {
     try {
-      const res = isLogin
-        ? await axios.post(LOGIN_URL, data)
-        : await axios.post(REGISTER_URL, data);
-
       if (isLogin) {
+        const res = await axios.post(LOGIN_URL, data);
         if (res.data.token) {
           localStorage.setItem("token", res.data.token);
           setIsAuthenticated(true);
           showSuccessToast("Welcome back!");
           navigate("/dashboard");
-        } else {
-          showSuccessToast(`Registration successful! Please login.`);
-          navigate("/login");
         }
+      } else {
+        await axios.post(REGISTER_URL, data);
+        showSuccessToast("Registration successful! Please log in.");
+        navigate("/login");
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "An error occurred";
-      console.log(errorMessage);
       console.error("Submission failed:", errorMessage);
       showErrorToast(errorMessage);
     }
