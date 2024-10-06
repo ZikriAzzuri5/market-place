@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { LOGIN_URL, REGISTER_URL } from "../service/api";
 import axios from "axios";
 import { useEffect } from "react";
-import { showSuccessToast } from "../utils/ToastUtils";
+import { showSuccessToast, showErrorToast } from "../utils/ToastUtils";
 
 // Schema untuk login
 const loginSchema = yup.object().shape({
@@ -72,17 +72,16 @@ export const AuthPage = ({ setIsAuthenticated }) => {
   });
 
   const onSubmit = async (data) => {
-    console.log("Data to submit:", data);
     try {
       const res = isLogin
         ? await axios.post(LOGIN_URL, data)
         : await axios.post(REGISTER_URL, data);
 
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        setIsAuthenticated(true);
-        if (isLogin) {
-          showSuccessToast(`Welcome back!`);
+      if (isLogin) {
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
+          setIsAuthenticated(true);
+          showSuccessToast("Welcome back!");
           navigate("/dashboard");
         } else {
           showSuccessToast(`Registration successful! Please login.`);
@@ -90,12 +89,15 @@ export const AuthPage = ({ setIsAuthenticated }) => {
         }
       }
     } catch (err) {
-      console.error("Login failed:", err);
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      console.log(errorMessage);
+      console.error("Submission failed:", errorMessage);
+      showErrorToast(errorMessage);
     }
   };
 
   const toggleAuthMode = () => {
-    reset(); // Reset data form saat berpindah mode
+    reset();
     navigate(isLogin ? "/register" : "/login");
   };
 
