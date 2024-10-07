@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
 
+const Order = require("../order/model");
+
 const productSchema = new Schema(
   {
     pd_code: {
@@ -28,5 +30,14 @@ const productSchema = new Schema(
   },
   { timestamps: true }
 );
+
+productSchema.pre("remove", async function (next) {
+  try {
+    await Order.deleteMany({ or_pd_id: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = model("Product", productSchema);

@@ -73,23 +73,15 @@ const index = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
 
     if (!product)
       return res
         .status(404)
         .json({ success: false, message: "Product not found" });
 
-    const result = await Order.deleteMany({ or_pd_id: req.params.id });
-    console.log(result);
-    // Tambahkan jumlah order yang terhapus ke dalam response
-    res.status(200).json({
-      success: true,
-      message: `Product deleted. ${result.deletedCount} related orders also deleted.`,
-      data: product,
-    });
-
-    // res.status(200).json({ success: true, data: product });
+    await product.remove();
+    res.status(200).json({ success: true, data: product });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
