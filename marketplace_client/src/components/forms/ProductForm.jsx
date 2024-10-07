@@ -90,7 +90,6 @@ export const ProductForm = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(data);
 
         showSuccessToast("Product created successfully!");
       }
