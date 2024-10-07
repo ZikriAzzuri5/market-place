@@ -1,4 +1,5 @@
 const Order = require("./model");
+const Product = require("../product/model");
 const Joi = require("joi");
 
 const orderSchema = Joi.object({

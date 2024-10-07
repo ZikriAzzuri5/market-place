@@ -1,4 +1,6 @@
 const Product = require("./model");
+const Order = require("../order/model");
+
 const Joi = require("joi");
 
 const productSchema = Joi.object({
@@ -77,6 +79,8 @@ const destroy = async (req, res, next) => {
       return res
         .status(404)
         .json({ success: false, message: "Product not found" });
+
+    await Order.deleteMany({ or_pd_id: req.params.id });
 
     res.status(200).json({ success: true, data: product });
   } catch (err) {

@@ -99,7 +99,11 @@ export const AuthPage = ({ setIsAuthenticated }) => {
   const onSubmit = async (data) => {
     try {
       if (isLogin) {
-        const res = await axios.post(LOGIN_URL, data);
+        const loginData = {
+          us_email: data.us_email,
+          us_password: data.us_password,
+        };
+        const res = await axios.post(LOGIN_URL, loginData);
         if (res.data.token) {
           localStorage.setItem("token", res.data.token);
           setIsAuthenticated(true);
