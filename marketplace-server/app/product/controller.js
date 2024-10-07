@@ -81,13 +81,15 @@ const destroy = async (req, res, next) => {
         .json({ success: false, message: "Product not found" });
 
     const result = await Order.deleteMany({ or_pd_id: req.params.id });
-    console.log(
-      result.deletedCount,
-      "orders deleted for product ID:",
-      req.params.id
-    );
 
-    res.status(200).json({ success: true, data: product });
+    // Tambahkan jumlah order yang terhapus ke dalam response
+    res.status(200).json({
+      success: true,
+      message: `Product deleted. ${result.deletedCount} related orders also deleted.`,
+      data: product,
+    });
+
+    // res.status(200).json({ success: true, data: product });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
