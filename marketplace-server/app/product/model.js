@@ -36,9 +36,14 @@ productSchema.pre(
   { document: true, query: false },
   async function (next) {
     try {
+      console.log(`Removing orders related to product: ${this._id}`);
       await Order.deleteMany({ or_pd_id: this._id });
+      console.log(
+        `Orders related to product ${this._id} deleted successfully.`
+      );
       next();
     } catch (err) {
+      console.error("Error in pre remove middleware:", err);
       next(err);
     }
   }

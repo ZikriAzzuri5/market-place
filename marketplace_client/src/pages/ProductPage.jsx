@@ -65,10 +65,8 @@ export const ProductPage = () => {
     }
   };
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.pd_ct_id &&
-      product.pd_name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  const filteredProducts = products.filter((product) =>
+    product.pd_name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
 
   const columns = [

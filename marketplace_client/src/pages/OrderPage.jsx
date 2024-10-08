@@ -65,12 +65,10 @@ export const OrderPage = () => {
     }
   };
 
-  const filteredOrders = orders.filter(
-    (order) =>
-      order.or_pd_id &&
-      order.or_pd_id.pd_name
-        .toLowerCase()
-        .includes(debouncedSearchTerm.toLowerCase())
+  const filteredOrders = orders.filter((order) =>
+    order.or_pd_id.pd_name
+      .toLowerCase()
+      .includes(debouncedSearchTerm.toLowerCase())
   );
 
   const columns = [
