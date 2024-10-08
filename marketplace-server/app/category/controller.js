@@ -62,8 +62,7 @@ const destroy = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Category not found" });
 
-    await Product.deleteMany({ pd_ct_id: req.params.id });
-
+    await category.remove();
     res.status(200).json({ success: true, data: category });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

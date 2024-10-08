@@ -22,16 +22,6 @@ const create = async (req, res, next) => {
   if (error) return handleValidationError(error, res);
 
   try {
-    const existingProduct = await Product.findOne({
-      pd_code: req.body.pd_code,
-    });
-
-    if (existingProduct) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Product code already exists" });
-    }
-
     const product = await Product.create(req.body);
 
     res.status(201).json({ success: true, data: product });

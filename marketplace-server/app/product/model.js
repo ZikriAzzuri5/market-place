@@ -33,13 +33,9 @@ const productSchema = new Schema(
 
 productSchema.pre("remove", async function (next) {
   try {
-    const result = await Order.deleteMany({ or_pd_id: this._id });
-    console.log(
-      `Deleted ${result.deletedCount} orders associated with product ${this._id}`
-    );
+    await Order.deleteMany({ or_pd_id: this._id });
     next();
   } catch (err) {
-    console.error("Error deleting orders:", err);
     next(err);
   }
 });

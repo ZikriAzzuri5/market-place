@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
 
+const Product = require("../product/model");
+
 const categorySchema = new Schema(
   {
     ct_code: {
@@ -18,5 +20,14 @@ const categorySchema = new Schema(
   },
   { timestamps: true }
 );
+
+categorySchema.pre("remove", async function (next) {
+  try {
+    await Product.deleteMany({ pd_ct_id: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = model("Category", categorySchema);
