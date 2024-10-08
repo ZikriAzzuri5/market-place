@@ -31,13 +31,17 @@ const productSchema = new Schema(
   { timestamps: true }
 );
 
-productSchema.pre("remove", async function (next) {
-  try {
-    await Order.deleteMany({ or_pd_id: this._id });
-    next();
-  } catch (err) {
-    next(err);
+productSchema.pre(
+  "remove",
+  { document: true, query: false },
+  async function (next) {
+    try {
+      await Order.deleteMany({ or_pd_id: this._id });
+      next();
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 module.exports = model("Product", productSchema);

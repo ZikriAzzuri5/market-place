@@ -21,13 +21,17 @@ const categorySchema = new Schema(
   { timestamps: true }
 );
 
-categorySchema.pre("remove", async function (next) {
-  try {
-    await Product.deleteMany({ pd_ct_id: this._id });
-    next();
-  } catch (err) {
-    next(err);
+categorySchema.pre(
+  "remove",
+  { document: true, query: false },
+  async function (next) {
+    try {
+      await Product.deleteMany({ pd_ct_id: this._id });
+      next();
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 module.exports = model("Category", categorySchema);
