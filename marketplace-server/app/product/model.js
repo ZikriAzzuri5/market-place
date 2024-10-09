@@ -32,21 +32,19 @@ const productSchema = new Schema(
 );
 
 productSchema.pre(
-  "remove",
-  { document: true, query: false },
+  "deleteOne",
+  { document: false, query: true },
   async function (next) {
     try {
-      console.log(`Removing orders related to product: ${this._id}`);
-      await Order.deleteMany({ or_pd_id: this._id });
-      console.log(
-        `Orders related to product ${this._id} deleted successfully.`
-      );
+      const productId = this.getFilter()["_id"];
+
+      await Order.deleteMany({ or_pd_id: productId });
+
       next();
     } catch (err) {
-      console.error("Error in pre remove middleware:", err);
+      console.error("Error in pre deleteOne middleware:", err);
       next(err);
     }
   }
 );
-
 module.exports = model("Product", productSchema);

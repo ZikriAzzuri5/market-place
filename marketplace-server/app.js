@@ -16,7 +16,10 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const corsOptions = {
-  origin: "https://marketplace-portofolio-zikri.web.app",
+  origin: [
+    "http://localhost:5173", // Port untuk frontend
+    "https://marketplace-portofolio-zikri.web.app", // Origin untuk produksi
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 };

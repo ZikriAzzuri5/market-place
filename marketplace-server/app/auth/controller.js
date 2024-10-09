@@ -25,7 +25,6 @@ const handleValidationError = (err, res) => {
 };
 
 const login = async (req, res, next) => {
-  console.log(req.body);
   const { error } = loginSchema.validate(req.body);
   if (error) return handleValidationError(error, res);
 

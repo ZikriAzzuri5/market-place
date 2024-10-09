@@ -22,13 +22,16 @@ const categorySchema = new Schema(
 );
 
 categorySchema.pre(
-  "remove",
-  { document: true, query: false },
+  "deleteOne",
+  { document: false, query: true },
   async function (next) {
     try {
-      await Product.deleteMany({ pd_ct_id: this._id });
+      const categoryId = this.getFilter()["_id"];
+      await Product.deleteMany({ pd_ct_id: categoryId });
       next();
     } catch (err) {
+      console.error("Error in pre deleteOne middleware:", err);
+
       next(err);
     }
   }

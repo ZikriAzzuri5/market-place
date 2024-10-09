@@ -26,7 +26,6 @@ const create = async (req, res, next) => {
 
     res.status(201).json({ success: true, data: product });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -63,15 +62,19 @@ const index = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const productId = req.params.id;
 
-    if (!product)
+    const result = await Product.deleteOne({ _id: productId });
+
+    if (result.deletedCount === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Product not found" });
+    }
 
-    await product.remove();
-    res.status(200).json({ success: true, data: product });
+    res
+      .status(200)
+      .json({ success: true, message: "Product deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
